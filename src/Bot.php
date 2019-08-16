@@ -44,8 +44,13 @@ class Bot
         foreach ($this->analysers as $analyserClass) {
             /** @var \Lxj\Review\Bot\analyser\Analyser $analyser */
             $analyser = (new $analyserClass($filePath));
-            $this->errors = array_merge($this->errors, $analyser->analyse($ast)->getErrors());
+            $this->collectErrors($analyser->analyse($ast)->getErrors());
         }
+    }
+
+    protected function collectErrors($errors)
+    {
+        $this->errors = array_merge($this->errors, $errors);
     }
 
     public function getErrors()
