@@ -1,6 +1,6 @@
 <?php
 
-namespace Lxj\Review\Bot\analyser;
+namespace Lxj\Review\Bot\Analyser;
 
 use PhpParser\Node\Expr;
 use PhpParser\Node\Name;

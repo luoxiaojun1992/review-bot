@@ -1,7 +1,7 @@
 <?php
 
 return [
-    \Lxj\Review\Bot\analyser\EchoAnalyser::class,
-    \Lxj\Review\Bot\analyser\ExitAnalyser::class,
-    \Lxj\Review\Bot\analyser\CommentAnalyser::class,
+    \Lxj\Review\Bot\Analyser\EchoAnalyser::class,
+    \Lxj\Review\Bot\Analyser\ExitAnalyser::class,
+    \Lxj\Review\Bot\Analyser\CommentAnalyser::class,
 ];

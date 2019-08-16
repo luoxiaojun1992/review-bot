@@ -42,7 +42,7 @@ class Bot
     protected function analyse($filePath, $ast)
     {
         foreach ($this->analysers as $analyserClass) {
-            /** @var \Lxj\Review\Bot\analyser\Analyser $analyser */
+            /** @var \Lxj\Review\Bot\Analyser\Analyser $analyser */
             $analyser = (new $analyserClass($filePath));
             $this->collectErrors($analyser->analyse($ast)->getErrors());
         }

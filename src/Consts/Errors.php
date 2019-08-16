@@ -1,6 +1,6 @@
 <?php
 
-namespace Lxj\Review\Bot\consts;
+namespace Lxj\Review\Bot\Consts;
 
 class Errors
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Lxj\Review\Bot\analyser;
+namespace Lxj\Review\Bot\Analyser;
 
-use Lxj\Review\Bot\consts\Errors;
+use Lxj\Review\Bot\Consts\Errors;
 
 class EchoAnalyser extends Analyser
 {
