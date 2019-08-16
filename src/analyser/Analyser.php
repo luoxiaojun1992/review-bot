@@ -5,6 +5,7 @@ namespace Lxj\Review\Bot\analyser;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Echo_;
 use PhpParser\Node\Stmt\Expression;
 
@@ -14,6 +15,9 @@ class Analyser
 
     protected $filePath;
 
+    protected $isController = false;
+    protected $isLogic = false;
+
     public function __construct($filePath)
     {
         $this->filePath = $filePath;
@@ -22,6 +26,24 @@ class Analyser
     public function analyse(array $stmts)
     {
         return $this;
+    }
+
+    protected function analyseClassTypes(array $stmts)
+    {
+        foreach ($stmts as $stmt) {
+            if ($this->assertController($stmt)) {
+                $this->isController = true;
+            }
+            if ($this->assertLogic($stmt)) {
+                $this->isLogic = true;
+            }
+
+            if (property_exists($stmt, 'stmts')) {
+                if (is_array($stmt->stmts) && count($stmt->stmts) > 0) {
+                    $this->analyseClassTypes($stmt->stmts);
+                }
+            }
+        }
     }
 
     protected function assertController($stmt)
@@ -61,6 +83,24 @@ class Analyser
             if ($stmt->expr instanceof Expr\Exit_) {
                 return true;
             }
+        }
+
+        return false;
+    }
+
+    protected function assertPublicMethod($stmt)
+    {
+        if ($stmt instanceof ClassMethod) {
+            return $stmt->isPublic();
+        }
+
+        return false;
+    }
+
+    protected function assertMethodWithoutComment($stmt)
+    {
+        if ($stmt instanceof ClassMethod) {
+            return count($stmt->getComments()) <= 0;
         }
 
         return false;

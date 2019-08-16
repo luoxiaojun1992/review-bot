@@ -4,7 +4,7 @@ namespace Lxj\Review\Bot\analyser;
 
 use Lxj\Review\Bot\consts\Errors;
 
-class ExitAnalyser extends Analyser
+class CommentAnalyser extends Analyser
 {
     protected $isController = false;
     protected $isLogic = false;
@@ -14,36 +14,36 @@ class ExitAnalyser extends Analyser
         parent::analyse($stmts);
 
         $this->analyseClassTypes($stmts);
-        $this->analyseHasExit($stmts);
+        $this->analyseNoComment($stmts);
 
         return $this;
     }
 
-    protected function analyseHasExit(array $stmts)
+    protected function analyseNoComment(array $stmts)
     {
         foreach ($stmts as $stmt) {
-            if ($this->assertExit($stmt)) {
+            if ($this->assertPublicMethod($stmt) && $this->assertMethodWithoutComment($stmt)) {
                 if ($this->isController) {
                     $this->addError([
                         'file' => $this->filePath,
                         'line' => $stmt->getLine(),
-                        'code' => Errors::EXIT_IN_CONTROLLER,
-                        'msg' => 'Cannot exit in controller.',
+                        'code' => Errors::PUBLIC_CTRL_ME_WITHOUT_COMMENTS,
+                        'msg' => 'Public controller method without comments',
                     ]);
                 }
                 if ($this->isLogic) {
                     $this->addError([
                         'file' => $this->filePath,
                         'line' => $stmt->getLine(),
-                        'code' => Errors::EXIT_IN_LOGIC,
-                        'msg' => 'Cannot exit in logic.',
+                        'code' => Errors::PUBLIC_LOGIC_ME_WITHOUT_COMMENTS,
+                        'msg' => 'Public logic method without comments',
                     ]);
                 }
             }
 
             if (property_exists($stmt, 'stmts')) {
                 if (is_array($stmt->stmts) && count($stmt->stmts) > 0) {
-                    $this->analyseHasExit($stmt->stmts);
+                    $this->analyseNoComment($stmt->stmts);
                 }
             }
         }

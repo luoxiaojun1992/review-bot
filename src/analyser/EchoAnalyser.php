@@ -19,24 +19,6 @@ class EchoAnalyser extends Analyser
         return $this;
     }
 
-    protected function analyseClassTypes(array $stmts)
-    {
-        foreach ($stmts as $stmt) {
-            if ($this->assertController($stmt)) {
-                $this->isController = true;
-            }
-            if ($this->assertLogic($stmt)) {
-                $this->isLogic = true;
-            }
-
-            if (property_exists($stmt, 'stmts')) {
-                if (is_array($stmt->stmts) && count($stmt->stmts) > 0) {
-                    $this->analyseClassTypes($stmt->stmts);
-                }
-            }
-        }
-    }
-
     protected function analyseHasEcho(array $stmts)
     {
         foreach ($stmts as $stmt) {
