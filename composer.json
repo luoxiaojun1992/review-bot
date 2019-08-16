@@ -3,6 +3,7 @@
     "description": "Code Review Robot",
     "type": "project",
     "require": {
+        "ext-json": "*",
         "nikic/php-parser": "~v4.2"
     },
     "license": "apache-2.0",
@@ -24,5 +25,10 @@
         "sort-packages": true,
         "optimize-autoloader": true,
         "preferred-install": "dist"
+    },
+    "autoload": {
+        "psr-4": {
+            "Lxj\\Review\\Bot\\": "src/"
+        }
     }
 }
