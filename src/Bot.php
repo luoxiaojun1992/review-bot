@@ -8,9 +8,9 @@ class Bot
 
     protected $analysers = [];
 
-    public function __construct()
+    public function __construct($analysers)
     {
-        $this->analysers = require __DIR__ . '/../config/analyser.php';
+        $this->analysers = $analysers;
     }
 
     public function review($fileOrDir)
