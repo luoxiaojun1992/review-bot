@@ -8,9 +8,12 @@ class Bot
 
     protected $analysers = [];
 
-    public function __construct($analysers)
+    protected $parser;
+
+    public function __construct($analysers, $parser = null)
     {
         $this->analysers = $analysers;
+        $this->parser = $parser ?: (new \PhpParser\ParserFactory())->create(\PhpParser\ParserFactory::PREFER_PHP7);
     }
 
     public function review($fileOrDir)
@@ -35,8 +38,7 @@ class Bot
 
     protected function parseAst($filePath)
     {
-        $parser = (new \PhpParser\ParserFactory())->create(\PhpParser\ParserFactory::PREFER_PHP7);
-        return $parser->parse(file_get_contents($filePath));
+        return $this->parser->parse(file_get_contents($filePath));
     }
 
     protected function analyse($filePath, $ast)
