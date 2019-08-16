@@ -2,6 +2,8 @@
 
 namespace Lxj\Review\Bot\analyser;
 
+use Lxj\Review\Bot\consts\Errors;
+
 class EchoAnalyser extends Analyser
 {
     protected $isController = false;
@@ -43,6 +45,7 @@ class EchoAnalyser extends Analyser
                     $this->addError([
                         'file' => $this->filePath,
                         'line' => $stmt->getLine(),
+                        'code' => Errors::ECHO_IN_CONTROLLER,
                         'msg' => 'Cannot echo in controller.',
                     ]);
                 }
@@ -50,6 +53,7 @@ class EchoAnalyser extends Analyser
                     $this->addError([
                         'file' => $this->filePath,
                         'line' => $stmt->getLine(),
+                        'code' => Errors::ECHO_IN_LOGIC,
                         'msg' => 'Cannot echo in logic.',
                     ]);
                 }
