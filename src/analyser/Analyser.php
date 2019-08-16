@@ -2,9 +2,11 @@
 
 namespace Lxj\Review\Bot\analyser;
 
+use PhpParser\Node\Expr;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Echo_;
+use PhpParser\Node\Stmt\Expression;
 
 class Analyser
 {
@@ -51,6 +53,17 @@ class Analyser
     protected function assertEcho($stmt)
     {
         return $stmt instanceof Echo_;
+    }
+
+    protected function assertExit($stmt)
+    {
+        if ($stmt instanceof Expression) {
+            if ($stmt->expr instanceof Expr\Exit_) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     protected function addError($error)
