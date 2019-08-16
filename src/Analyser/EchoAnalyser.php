@@ -6,9 +6,6 @@ use Lxj\Review\Bot\Consts\Errors;
 
 class EchoAnalyser extends Analyser
 {
-    protected $isController = false;
-    protected $isLogic = false;
-
     public function analyse(array $stmts)
     {
         parent::analyse($stmts);

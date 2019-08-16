@@ -8,6 +8,8 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Echo_;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Use_;
+use PhpParser\Node\Stmt\UseUse;
 
 class Analyser
 {
@@ -101,6 +103,20 @@ class Analyser
     {
         if ($stmt instanceof ClassMethod) {
             return count($stmt->getComments()) <= 0;
+        }
+
+        return false;
+    }
+
+    protected function assertUse($stmt)
+    {
+        return $stmt instanceof Use_;
+    }
+
+    protected function assertUseRepository($stmt)
+    {
+        if ($stmt instanceof UseUse) {
+            return count(array_intersect(['App', 'Domains', 'Repositories', 'Repository'], $stmt->name->parts)) == 4;
         }
 
         return false;
