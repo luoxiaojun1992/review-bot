@@ -1,0 +1,28 @@
+{
+    "name": "luoxiaojun/review-bot",
+    "description": "Code Review Robot",
+    "type": "project",
+    "require": {
+        "nikic/php-parser": "~v4.2"
+    },
+    "license": "apache-2.0",
+    "authors": [
+        {
+            "name": "luoxiaojun",
+            "email": "luoxiaojun1992@sina.cn"
+        }
+    ],
+    "minimum-stability": "dev",
+    "repositories": {
+        "packagist": {
+            "type": "composer",
+            "url": "https://mirrors.aliyun.com/composer/"
+        }
+    },
+    "prefer-stable": true,
+    "config": {
+        "sort-packages": true,
+        "optimize-autoloader": true,
+        "preferred-install": "dist"
+    }
+}
