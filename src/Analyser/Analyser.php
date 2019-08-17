@@ -116,7 +116,16 @@ class Analyser
     protected function assertUseRepository($stmt)
     {
         if ($stmt instanceof UseUse) {
-            return count(array_intersect(['App', 'Domains', 'Repositories', 'Repository'], $stmt->name->parts)) == 4;
+            return count(array_intersect(['App', 'Domains', 'Repositories', 'Repository'], $stmt->name->parts)) >= 4;
+        }
+
+        return false;
+    }
+
+    protected function assertUseModel($stmt)
+    {
+        if ($stmt instanceof UseUse) {
+            return count(array_intersect(['App', 'Domains', 'Repositories'], $stmt->name->parts)) >= 3;
         }
 
         return false;

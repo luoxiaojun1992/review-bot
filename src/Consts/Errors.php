@@ -12,4 +12,6 @@ class Errors
     const PUBLIC_LOGIC_ME_WITHOUT_COMMENTS = 6;
     const USE_REPO_IN_CONTROLLER = 7;
     const USE_REPO_IN_LOGIC = 8;
+    const USE_MODEL_IN_CONTROLLER = 9;
+    const USE_MODEL_IN_LOGIC = 10;
 }

@@ -39,6 +39,24 @@ class UseAnalyser extends Analyser
                             ]);
                         }
                     }
+                    if ($this->assertUseModel($useStmt)) {
+                        if ($this->isController) {
+                            $this->addError([
+                                'file' => $this->filePath,
+                                'line' => $stmt->getLine(),
+                                'code' => Errors::USE_MODEL_IN_CONTROLLER,
+                                'msg' => 'Cannot use model in controller',
+                            ]);
+                        }
+                        if ($this->isLogic) {
+                            $this->addError([
+                                'file' => $this->filePath,
+                                'line' => $stmt->getLine(),
+                                'code' => Errors::USE_MODEL_IN_LOGIC,
+                                'msg' => 'Cannot use model in logic',
+                            ]);
+                        }
+                    }
                 }
             }
 
