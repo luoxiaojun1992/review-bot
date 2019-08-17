@@ -38,6 +38,14 @@ class UseAnalyser extends Analyser
                                 'msg' => 'Cannot use repo in logic',
                             ]);
                         }
+                        if ($this->isCommand) {
+                            $this->addError([
+                                'file' => $this->filePath,
+                                'line' => $stmt->getLine(),
+                                'code' => Errors::USE_REPO_IN_COMMAND,
+                                'msg' => 'Cannot use repo in command',
+                            ]);
+                        }
                     }
                     if ($this->assertUseModel($useStmt)) {
                         if ($this->isController) {
@@ -54,6 +62,14 @@ class UseAnalyser extends Analyser
                                 'line' => $stmt->getLine(),
                                 'code' => Errors::USE_MODEL_IN_LOGIC,
                                 'msg' => 'Cannot use model in logic',
+                            ]);
+                        }
+                        if ($this->isCommand) {
+                            $this->addError([
+                                'file' => $this->filePath,
+                                'line' => $stmt->getLine(),
+                                'code' => Errors::USE_MODEL_IN_COMMAND,
+                                'msg' => 'Cannot use model in command',
                             ]);
                         }
                     }

@@ -19,6 +19,7 @@ class Analyser
 
     protected $isController = false;
     protected $isLogic = false;
+    protected $isCommand = false;
 
     public function __construct($filePath)
     {
@@ -39,6 +40,9 @@ class Analyser
             if ($this->assertLogic($stmt)) {
                 $this->isLogic = true;
             }
+            if ($this->assertCommand($stmt)) {
+                $this->isCommand = true;
+            }
 
             if (property_exists($stmt, 'stmts')) {
                 if (is_array($stmt->stmts) && count($stmt->stmts) > 0) {
@@ -56,6 +60,11 @@ class Analyser
     protected function assertLogic($stmt)
     {
         return $this->assertClassType($stmt, 'BaseLogic');
+    }
+
+    protected function assertCommand($stmt)
+    {
+        return $this->assertClassType($stmt, 'Command');
     }
 
     protected function assertClassType($stmt, $type)
@@ -125,7 +134,9 @@ class Analyser
     protected function assertUseModel($stmt)
     {
         if ($stmt instanceof UseUse) {
-            return count(array_intersect(['App', 'Domains', 'Repositories'], $stmt->name->parts)) >= 3;
+            if (!$this->assertUseRepository($stmt)) {
+                return count(array_intersect(['App', 'Domains', 'Repositories'], $stmt->name->parts)) >= 3;
+            }
         }
 
         return false;

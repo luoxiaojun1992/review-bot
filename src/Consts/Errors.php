@@ -14,4 +14,6 @@ class Errors
     const USE_REPO_IN_LOGIC = 8;
     const USE_MODEL_IN_CONTROLLER = 9;
     const USE_MODEL_IN_LOGIC = 10;
+    const USE_REPO_IN_COMMAND = 11;
+    const USE_MODEL_IN_COMMAND = 12;
 }
