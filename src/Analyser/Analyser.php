@@ -8,6 +8,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Echo_;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 
@@ -54,26 +55,56 @@ class Analyser
 
     protected function assertController($stmt)
     {
-        return $this->assertClassType($stmt, 'Controller');
+        if ($this->assertClassExtends($stmt, 'Controller')) {
+            return true;
+        }
+
+        if ($stmt instanceof Namespace_) {
+            if (count(array_intersect(['App', 'Http', 'Controllers'], $stmt->name->parts)) >= 3) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     protected function assertLogic($stmt)
     {
-        return $this->assertClassType($stmt, 'BaseLogic');
+        if ($this->assertClassExtends($stmt, 'BaseLogic')) {
+            return true;
+        }
+
+        if ($stmt instanceof Namespace_) {
+            if (count(array_intersect(['App', 'Domains', 'Logics'], $stmt->name->parts)) >= 3) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     protected function assertCommand($stmt)
     {
-        return $this->assertClassType($stmt, 'Command');
+        if ($this->assertClassExtends($stmt, 'Command')) {
+            return true;
+        }
+
+        if ($stmt instanceof Namespace_) {
+            if (count(array_intersect(['App', 'Console', 'Commands'], $stmt->name->parts)) >= 3) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
-    protected function assertClassType($stmt, $type)
+    protected function assertClassExtends($stmt, $base)
     {
         if ($stmt instanceof Class_) {
             if ($stmt->extends instanceof Name) {
                 $extendNode = $stmt->extends;
                 if (isset($extendNode->parts[0])) {
-                    if ($extendNode->parts[0] === $type) {
+                    if ($extendNode->parts[0] === $base) {
                         return true;
                     }
                 }
