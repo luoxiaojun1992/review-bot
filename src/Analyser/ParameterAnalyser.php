@@ -12,12 +12,12 @@ class ParameterAnalyser extends Analyser
         parent::analyse($stmts);
 
         $this->analyseClassTypes($stmts);
-        $this->analyseUse($stmts);
+        $this->analyseParameter($stmts);
 
         return $this;
     }
 
-    protected function analyseUse(array $stmts)
+    protected function analyseParameter(array $stmts)
     {
         foreach ($stmts as $stmt) {
             if ($stmt instanceof ClassMethod) {
@@ -40,7 +40,7 @@ class ParameterAnalyser extends Analyser
 
             if (property_exists($stmt, 'stmts')) {
                 if (is_array($stmt->stmts) && count($stmt->stmts) > 0) {
-                    $this->analyseUse($stmt->stmts);
+                    $this->analyseParameter($stmt->stmts);
                 }
             }
         }
