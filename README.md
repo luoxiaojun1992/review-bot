@@ -2,7 +2,11 @@
 
 ## Usage
 ```shell
+# Review by file path
 php robot.php path/to
+
+# Review by merge request url
+php mr.php {merge_request_url}
 ```
 
 ## Supported Rules
