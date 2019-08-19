@@ -27,6 +27,12 @@ $client = \Gitlab\Client::create($gitlabConfig['api_gateway'])
 
 $projects = $client->projects()->all(['search' => $projectName]);
 
+if (count($projects) <= 0) {
+    echo 'Project not found.';
+    echo PHP_EOL;
+    exit(1);
+}
+
 if (count($projects) == 1) {
     $project = $projects[0];
     $projectId = $project['id'];
