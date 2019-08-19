@@ -16,4 +16,5 @@ class Errors
     const USE_MODEL_IN_LOGIC = 10;
     const USE_REPO_IN_COMMAND = 11;
     const USE_MODEL_IN_COMMAND = 12;
+    const ME_ARGS_WITH_DEFAULT_VALUE = 13;
 }
