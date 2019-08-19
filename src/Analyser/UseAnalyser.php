@@ -30,14 +30,6 @@ class UseAnalyser extends Analyser
                                 'msg' => 'Cannot use repo in controller',
                             ]);
                         }
-                        if ($this->isLogic) {
-                            $this->addError([
-                                'file' => $this->filePath,
-                                'line' => $stmt->getLine(),
-                                'code' => Errors::USE_REPO_IN_LOGIC,
-                                'msg' => 'Cannot use repo in logic',
-                            ]);
-                        }
                         if ($this->isCommand) {
                             $this->addError([
                                 'file' => $this->filePath,
