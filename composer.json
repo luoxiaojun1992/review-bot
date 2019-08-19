@@ -4,7 +4,9 @@
     "type": "project",
     "require": {
         "ext-json": "*",
-        "nikic/php-parser": "~v4.2"
+        "m4tthumphrey/php-gitlab-api": "^9.13",
+        "nikic/php-parser": "~v4.2",
+        "php-http/guzzle6-adapter": "^1.0"
     },
     "license": "apache-2.0",
     "authors": [
@@ -30,5 +32,8 @@
         "psr-4": {
             "Lxj\\Review\\Bot\\": "src/"
         }
+    },
+    "scripts": {
+        "post-install-cmd": "@php -r \"file_exists('./config/gitlab.php') || copy('./config/gitlab.php.example', './config/gitlab.php');\""
     }
 }
