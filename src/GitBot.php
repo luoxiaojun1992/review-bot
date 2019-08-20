@@ -28,6 +28,27 @@ class GitBot
      */
     public function review($mergeRequestUrl)
     {
+        list($projectName, $mergeRequestId) = $this->parseMergeRequestUrl($mergeRequestUrl);
+
+        $project = $this->fetchProjectInfo($projectName);
+        $projectId = $project['id'];
+
+        $mergeRequest = $this->gitClient->mergeRequests()->show($projectId, $mergeRequestId);
+
+        $this->prepareCode($projectId, $project['ssh_url_to_repo'], $mergeRequest['source_branch']);
+
+        $this->reviewChanges($projectId, $mergeRequestId);
+
+        return $this;
+    }
+
+    /**
+     * @param $mergeRequestUrl
+     * @return array
+     * @throws \Exception
+     */
+    protected function parseMergeRequestUrl($mergeRequestUrl)
+    {
         $urlInfo = parse_url($mergeRequestUrl);
         if (!isset($urlInfo['path'])) {
             throw new \Exception('Merge request url path not found.');
@@ -37,26 +58,27 @@ class GitBot
         $projectName = $pathArr[1];
         $mergeRequestId = $pathArr[3];
 
+        return [$projectName, $mergeRequestId];
+    }
+
+    /**
+     * @param $projectName
+     * @return mixed
+     * @throws \Exception
+     */
+    protected function fetchProjectInfo($projectName)
+    {
         $projects = $this->gitClient->projects()->all(['search' => $projectName]);
 
         if (count($projects) <= 0) {
             throw new \Exception('Project not found.');
         }
 
-        if (count($projects) == 1) {
-            $project = $projects[0];
-            $projectId = $project['id'];
-
-            $mergeRequest = $this->gitClient->mergeRequests()->show($projectId, $mergeRequestId);
-
-            $this->prepareCode($projectId, $project['ssh_url_to_repo'], $mergeRequest['source_branch']);
-
-            $this->reviewChanges($projectId, $mergeRequestId);
-
-            return $this;
-        } else {
+        if (count($projects) > 1) {
             throw new \Exception('Searched multiple projects:' . json_encode(array_column($projects, 'name')));
         }
+
+        return $projects[0];
     }
 
     protected function getStorageDir()
