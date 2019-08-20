@@ -2,13 +2,16 @@
 
 namespace Lxj\Review\Bot;
 
+use Lxj\Review\Bot\Traits\ErrorCollector;
+
 class GitBot
 {
+    use ErrorCollector;
+
     /** @var Bot */
     protected $reviewBot;
     protected $gitConfig;
     protected $gitClient;
-    protected $errors = [];
 
     public function __construct($reviewBot, $gitConfig, $gitClient = null)
     {
@@ -73,7 +76,7 @@ class GitBot
         if (!is_dir($localProjectDir)) {
             shell_exec('cd ' . $storageDir . ' && git clone ' . $projectUrl . ' ./' . $projectId . ' && cd ' . $projectId . ' && git checkout ' . $sourceBranch);
         } else {
-            shell_exec('cd ' . $localProjectDir . ' && git checkout ' . $sourceBranch);
+            shell_exec('cd ' . $localProjectDir . ' && git checkout ' . $sourceBranch . ' && git pull');
         }
     }
 
@@ -90,21 +93,5 @@ class GitBot
                 }
             }
         }
-    }
-
-    protected function collectErrors($errors)
-    {
-        $this->errors = array_merge($this->errors, $errors);
-    }
-
-    public function clearErrors()
-    {
-        $this->errors = [];
-        return $this;
-    }
-
-    public function getErrors()
-    {
-        return $this->errors;
     }
 }

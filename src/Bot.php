@@ -2,12 +2,13 @@
 
 namespace Lxj\Review\Bot;
 
+use Lxj\Review\Bot\Traits\ErrorCollector;
+
 class Bot
 {
-    protected $errors = [];
+    use ErrorCollector;
 
     protected $analysers = [];
-
     protected $parser;
 
     public function __construct($analysers, $parser = null)
@@ -48,21 +49,5 @@ class Bot
             $analyser = (new $analyserClass($filePath));
             $this->collectErrors($analyser->analyse($ast)->getErrors());
         }
-    }
-
-    protected function collectErrors($errors)
-    {
-        $this->errors = array_merge($this->errors, $errors);
-    }
-
-    public function clearErrors()
-    {
-        $this->errors = [];
-        return $this;
-    }
-
-    public function getErrors()
-    {
-        return $this->errors;
     }
 }
