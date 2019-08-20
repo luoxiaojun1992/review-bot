@@ -8,6 +8,7 @@ class GitBot
     protected $reviewBot;
     protected $gitConfig;
     protected $gitClient;
+    protected $errors = [];
 
     public function __construct($reviewBot, $gitConfig, $gitClient = null)
     {
@@ -19,7 +20,7 @@ class GitBot
 
     /**
      * @param $mergeRequestUrl
-     * @return array
+     * @return $this
      * @throws \Exception
      */
     public function review($mergeRequestUrl)
@@ -47,21 +48,9 @@ class GitBot
 
             $this->prepareCode($projectId, $project['ssh_url_to_repo'], $mergeRequest['source_branch']);
 
-            $mergeRequestChanges = $this->gitClient->mergeRequests()->changes($projectId, $mergeRequestId);
-            $fileChanges = $mergeRequestChanges['changes'];
-            $errors = [];
-            foreach ($fileChanges as $fileChange) {
-                if (!$fileChange['deleted_file']) {
-                    if (pathinfo($fileChange['new_path'], PATHINFO_EXTENSION) === 'php') {
-                        $errors = array_merge(
-                            $errors,
-                            $this->reviewBot->review($this->getLocalProjectDir($projectId) . '/' . $fileChange['new_path'])->getErrors()
-                        );
-                    }
-                }
-            }
+            $this->reviewChanges($projectId, $mergeRequestId);
 
-            return $errors;
+            return $this;
         } else {
             throw new \Exception('Searched multiple projects:' . json_encode(array_column($projects, 'name')));
         }
@@ -86,5 +75,36 @@ class GitBot
         } else {
             shell_exec('cd ' . $localProjectDir . ' && git checkout ' . $sourceBranch);
         }
+    }
+
+    protected function reviewChanges($projectId, $mergeRequestId)
+    {
+        $mergeRequestChanges = $this->gitClient->mergeRequests()->changes($projectId, $mergeRequestId);
+        $fileChanges = $mergeRequestChanges['changes'];
+        foreach ($fileChanges as $fileChange) {
+            if (!$fileChange['deleted_file']) {
+                if (pathinfo($fileChange['new_path'], PATHINFO_EXTENSION) === 'php') {
+                    $this->collectErrors($this->reviewBot->clearErrors()
+                        ->review($this->getLocalProjectDir($projectId) . '/' . $fileChange['new_path'])
+                        ->getErrors());
+                }
+            }
+        }
+    }
+
+    protected function collectErrors($errors)
+    {
+        $this->errors = array_merge($this->errors, $errors);
+    }
+
+    public function clearErrors()
+    {
+        $this->errors = [];
+        return $this;
+    }
+
+    public function getErrors()
+    {
+        return $this->errors;
     }
 }
