@@ -10,10 +10,12 @@ class Bot
 
     protected $analysers = [];
     protected $parser;
+    protected $ignored;
 
-    public function __construct($analysers, $parser = null)
+    public function __construct($analysers, $ignored = [], $parser = null)
     {
         $this->analysers = $analysers;
+        $this->ignored = $ignored;
         $this->parser = $parser ?: (new \PhpParser\ParserFactory())->create(\PhpParser\ParserFactory::PREFER_PHP7);
     }
 
@@ -46,7 +48,7 @@ class Bot
     {
         foreach ($this->analysers as $analyserClass) {
             /** @var \Lxj\Review\Bot\Analyser\Analyser $analyser */
-            $analyser = (new $analyserClass($filePath));
+            $analyser = (new $analyserClass($filePath, $this->ignored));
             $this->collectErrors($analyser->analyse($ast)->getErrors());
         }
     }

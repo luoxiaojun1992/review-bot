@@ -2,3 +2,4 @@
 /.idea
 /storage
 /config/gitlab.php
+/config/ignored.php

@@ -17,14 +17,16 @@ class Analyser
     protected $errors = [];
 
     protected $filePath;
+    protected $ignored;
 
     protected $isController = false;
     protected $isLogic = false;
     protected $isCommand = false;
 
-    public function __construct($filePath)
+    public function __construct($filePath, $ignored)
     {
         $this->filePath = $filePath;
+        $this->ignored = $ignored;
     }
 
     public function analyse(array $stmts)
@@ -175,7 +177,9 @@ class Analyser
 
     protected function addError($error)
     {
-        $this->errors[] = $error;
+        if (!in_array(implode(':', [$error['file'], $error['line'], $error['code']]), $this->ignored)) {
+            $this->errors[] = $error;
+        }
     }
 
     public function getErrors()
