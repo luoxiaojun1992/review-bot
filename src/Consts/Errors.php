@@ -17,6 +17,7 @@ class Errors
     const USE_MODEL_IN_COMMAND = 11;
     const ME_ARGS_WITH_DEFAULT_VALUE = 12;
     const RET_API_FORMAT_DATA_IN_LOGIC = 13;
+    const METHOD_TOO_LARGE = 14;
 
     const MESSAGES = [
         self::ECHO_IN_CONTROLLER => 'Cannot echo in controller.',
@@ -32,6 +33,7 @@ class Errors
         self::USE_MODEL_IN_COMMAND => 'Cannot use model in command.',
         self::ME_ARGS_WITH_DEFAULT_VALUE => 'Method arguments with default values MUST go at the end of the argument list.',
         self::RET_API_FORMAT_DATA_IN_LOGIC => 'Cannot return api format data in logic.',
+        self::METHOD_TOO_LARGE => 'Method is too large.',
     ];
 
     const CHINESE_MESSAGES = [
@@ -48,6 +50,7 @@ class Errors
 //        self::USE_MODEL_IN_COMMAND => '',
 //        self::ME_ARGS_WITH_DEFAULT_VALUE => '',
 //        self::RET_API_FORMAT_DATA_IN_LOGIC => '',
+//        self::METHOD_TOO_LARGE => '',
     ];
 
     public static function message($code)
