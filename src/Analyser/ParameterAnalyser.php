@@ -21,6 +21,10 @@ class ParameterAnalyser extends Analyser
     {
         foreach ($stmts as $stmt) {
             if ($stmt instanceof ClassMethod) {
+                if (count($stmt->params) > 10) {
+                    $this->addError($stmt->getLine(), Errors::TOO_MANY_ARGUMENTS);
+                }
+
                 foreach ($stmt->params as $i => $param) {
                     if (!is_null($param->default)) {
                         if (isset($stmt->params[$i + 1])) {

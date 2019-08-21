@@ -18,6 +18,7 @@ class Errors
     const ME_ARGS_WITH_DEFAULT_VALUE = 12;
     const RET_API_FORMAT_DATA_IN_LOGIC = 13;
     const METHOD_TOO_LARGE = 14;
+    const TOO_MANY_ARGUMENTS = 15;
 
     const MESSAGES = [
         self::ECHO_IN_CONTROLLER => 'Cannot echo in controller.',
@@ -34,6 +35,7 @@ class Errors
         self::ME_ARGS_WITH_DEFAULT_VALUE => 'Method arguments with default values MUST go at the end of the argument list.',
         self::RET_API_FORMAT_DATA_IN_LOGIC => 'Cannot return api format data in logic.',
         self::METHOD_TOO_LARGE => 'Method is too large.',
+        self::TOO_MANY_ARGUMENTS => 'Too many arguments.',
     ];
 
     const CHINESE_MESSAGES = [
@@ -51,6 +53,7 @@ class Errors
 //        self::ME_ARGS_WITH_DEFAULT_VALUE => '',
 //        self::RET_API_FORMAT_DATA_IN_LOGIC => '',
 //        self::METHOD_TOO_LARGE => '',
+//        self::TOO_MANY_ARGUMENTS => '',
     ];
 
     public static function message($code)
