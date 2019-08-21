@@ -2,6 +2,7 @@
 
 namespace Lxj\Review\Bot;
 
+use Gitlab\Client;
 use Lxj\Review\Bot\Traits\ErrorCollector;
 
 class GitBot
@@ -81,8 +82,17 @@ class GitBot
         return $projects[0];
     }
 
+    protected function isGitLab()
+    {
+        return $this->gitClient instanceof Client;
+    }
+
     protected function getStorageDir()
     {
+        if ($this->isGitLab()) {
+            return __DIR__ . '/../storage/gitlab';
+        }
+
         return __DIR__ . '/../storage';
     }
 
