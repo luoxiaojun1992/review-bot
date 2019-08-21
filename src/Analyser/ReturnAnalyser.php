@@ -34,12 +34,7 @@ class ReturnAnalyser extends Analyser
                         count(array_intersect(['code', 'message'], $returnArrKeys)) == 2
                     ) {
                         if ($this->isLogic) {
-                            $this->addError([
-                                'file' => $this->filePath,
-                                'line' => $stmt->getLine(),
-                                'code' => Errors::RET_API_FORMAT_DATA_IN_LOGIC,
-                                'msg' => 'Cannot return api format data in logic',
-                            ]);
+                            $this->addError($stmt->getLine(), Errors::RET_API_FORMAT_DATA_IN_LOGIC);
                         }
                     }
                 }

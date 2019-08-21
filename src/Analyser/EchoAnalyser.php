@@ -21,20 +21,10 @@ class EchoAnalyser extends Analyser
         foreach ($stmts as $stmt) {
             if ($this->assertEcho($stmt)) {
                 if ($this->isController) {
-                    $this->addError([
-                        'file' => $this->filePath,
-                        'line' => $stmt->getLine(),
-                        'code' => Errors::ECHO_IN_CONTROLLER,
-                        'msg' => 'Cannot echo in controller.',
-                    ]);
+                    $this->addError($stmt->getLine(), Errors::ECHO_IN_CONTROLLER);
                 }
                 if ($this->isLogic) {
-                    $this->addError([
-                        'file' => $this->filePath,
-                        'line' => $stmt->getLine(),
-                        'code' => Errors::ECHO_IN_LOGIC,
-                        'msg' => 'Cannot echo in logic.',
-                    ]);
+                    $this->addError($stmt->getLine(), Errors::ECHO_IN_LOGIC);
                 }
             }
 

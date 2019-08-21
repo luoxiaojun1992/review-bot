@@ -2,6 +2,7 @@
 
 namespace Lxj\Review\Bot\Analyser;
 
+use Lxj\Review\Bot\Consts\Errors;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
@@ -175,10 +176,17 @@ class Analyser
         return false;
     }
 
-    protected function addError($error)
+    protected function addError($line, $code, $file = null, $msg = null, $chineseMsg = null)
     {
-        if (!in_array(implode(':', [$error['file'], $error['line'], $error['code']]), $this->ignored)) {
-            $this->errors[] = $error;
+        $file = $file ?: $this->filePath;
+        if (!in_array(implode(':', [$file, $line, $code]), $this->ignored)) {
+            $this->errors[] = [
+                'file' => $file,
+                'line' => $line,
+                'code' => $code,
+                'msg' => $msg ?: Errors::message($code),
+                'chinese_msg' => $chineseMsg ?: Errors::chineseMessage($code),
+            ];
         }
     }
 

@@ -3,6 +3,7 @@
     "description": "Code Review Robot",
     "type": "project",
     "require": {
+        "php": ">=7.1",
         "ext-json": "*",
         "m4tthumphrey/php-gitlab-api": "^9.13",
         "nikic/php-parser": "~v4.2",
@@ -34,6 +35,9 @@
         }
     },
     "scripts": {
-        "post-install-cmd": "@php -r \"file_exists('./config/gitlab.php') || copy('./config/gitlab.php.example', './config/gitlab.php');\""
+        "post-install-cmd": [
+            "@php -r \"file_exists('./config/gitlab.php') || copy('./config/gitlab.template.php', './config/gitlab.php');\"",
+            "@php -r \"file_exists('./config/gitlab.php') || copy('./config/ignored.template.php', './config/ignored.php');\""
+        ]
     }
 }

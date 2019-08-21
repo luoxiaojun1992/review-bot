@@ -21,20 +21,10 @@ class CommentAnalyser extends Analyser
         foreach ($stmts as $stmt) {
             if ($this->assertPublicMethod($stmt) && $this->assertMethodWithoutComment($stmt)) {
                 if ($this->isController) {
-                    $this->addError([
-                        'file' => $this->filePath,
-                        'line' => $stmt->getLine(),
-                        'code' => Errors::PUBLIC_CTRL_ME_WITHOUT_COMMENTS,
-                        'msg' => 'Public controller method without comments',
-                    ]);
+                    $this->addError($stmt->getLine(), Errors::PUBLIC_CTRL_ME_WITHOUT_COMMENTS);
                 }
                 if ($this->isLogic) {
-                    $this->addError([
-                        'file' => $this->filePath,
-                        'line' => $stmt->getLine(),
-                        'code' => Errors::PUBLIC_LOGIC_ME_WITHOUT_COMMENTS,
-                        'msg' => 'Public logic method without comments',
-                    ]);
+                    $this->addError($stmt->getLine(), Errors::PUBLIC_LOGIC_ME_WITHOUT_COMMENTS);
                 }
             }
 

@@ -23,46 +23,21 @@ class UseAnalyser extends Analyser
                 foreach ($stmt->uses as $useStmt) {
                     if ($this->assertUseRepository($useStmt)) {
                         if ($this->isController) {
-                            $this->addError([
-                                'file' => $this->filePath,
-                                'line' => $stmt->getLine(),
-                                'code' => Errors::USE_REPO_IN_CONTROLLER,
-                                'msg' => 'Cannot use repo in controller',
-                            ]);
+                            $this->addError($stmt->getLine(), Errors::USE_REPO_IN_CONTROLLER);
                         }
                         if ($this->isCommand) {
-                            $this->addError([
-                                'file' => $this->filePath,
-                                'line' => $stmt->getLine(),
-                                'code' => Errors::USE_REPO_IN_COMMAND,
-                                'msg' => 'Cannot use repo in command',
-                            ]);
+                            $this->addError($stmt->getLine(), Errors::USE_REPO_IN_COMMAND);
                         }
                     }
                     if ($this->assertUseModel($useStmt)) {
                         if ($this->isController) {
-                            $this->addError([
-                                'file' => $this->filePath,
-                                'line' => $stmt->getLine(),
-                                'code' => Errors::USE_MODEL_IN_CONTROLLER,
-                                'msg' => 'Cannot use model in controller',
-                            ]);
+                            $this->addError($stmt->getLine(), Errors::USE_MODEL_IN_CONTROLLER);
                         }
                         if ($this->isLogic) {
-                            $this->addError([
-                                'file' => $this->filePath,
-                                'line' => $stmt->getLine(),
-                                'code' => Errors::USE_MODEL_IN_LOGIC,
-                                'msg' => 'Cannot use model in logic',
-                            ]);
+                            $this->addError($stmt->getLine(), Errors::USE_MODEL_IN_LOGIC);
                         }
                         if ($this->isCommand) {
-                            $this->addError([
-                                'file' => $this->filePath,
-                                'line' => $stmt->getLine(),
-                                'code' => Errors::USE_MODEL_IN_COMMAND,
-                                'msg' => 'Cannot use model in command',
-                            ]);
+                            $this->addError($stmt->getLine(), Errors::USE_MODEL_IN_COMMAND);
                         }
                     }
                 }

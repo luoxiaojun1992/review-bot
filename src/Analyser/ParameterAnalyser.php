@@ -25,12 +25,7 @@ class ParameterAnalyser extends Analyser
                     if (!is_null($param->default)) {
                         if (isset($stmt->params[$i + 1])) {
                             if (is_null($stmt->params[$i + 1]->default)) {
-                                $this->addError([
-                                    'file' => $this->filePath,
-                                    'line' => $stmt->getLine(),
-                                    'code' => Errors::ME_ARGS_WITH_DEFAULT_VALUE,
-                                    'msg' => 'Method arguments with default values MUST go at the end of the argument list',
-                                ]);
+                                $this->addError($stmt->getLine(), Errors::ME_ARGS_WITH_DEFAULT_VALUE);
                                 break;
                             }
                         }

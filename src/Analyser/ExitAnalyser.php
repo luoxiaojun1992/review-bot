@@ -21,20 +21,10 @@ class ExitAnalyser extends Analyser
         foreach ($stmts as $stmt) {
             if ($this->assertExit($stmt)) {
                 if ($this->isController) {
-                    $this->addError([
-                        'file' => $this->filePath,
-                        'line' => $stmt->getLine(),
-                        'code' => Errors::EXIT_IN_CONTROLLER,
-                        'msg' => 'Cannot exit in controller.',
-                    ]);
+                    $this->addError($stmt->getLine(), Errors::EXIT_IN_CONTROLLER);
                 }
                 if ($this->isLogic) {
-                    $this->addError([
-                        'file' => $this->filePath,
-                        'line' => $stmt->getLine(),
-                        'code' => Errors::EXIT_IN_LOGIC,
-                        'msg' => 'Cannot exit in logic.',
-                    ]);
+                    $this->addError($stmt->getLine(), Errors::EXIT_IN_LOGIC);
                 }
             }
 
