@@ -7,6 +7,8 @@ use PhpParser\Node\Stmt\ClassMethod;
 
 class ParameterAnalyser extends Analyser
 {
+    protected $argumentLengthLimit = 10;
+
     public function analyse(array $stmts)
     {
         parent::analyse($stmts);
@@ -21,7 +23,7 @@ class ParameterAnalyser extends Analyser
     {
         foreach ($stmts as $stmt) {
             if ($stmt instanceof ClassMethod) {
-                if (count($stmt->params) > 10) {
+                if (count($stmt->params) > $this->argumentLengthLimit) {
                     $this->addError($stmt->getLine(), Errors::TOO_MANY_ARGUMENTS);
                 }
 

@@ -24,10 +24,22 @@ class Analyser
     protected $isLogic = false;
     protected $isCommand = false;
 
-    public function __construct($filePath, $ignored)
+    public function __construct($filePath, $ignored = [], $options = [])
     {
         $this->filePath = $filePath;
         $this->ignored = $ignored;
+        $this->setOptions($options);
+    }
+
+    protected function setOptions($options)
+    {
+        foreach ($options as $optionName => $optionValue) {
+            if (property_exists($this, $optionName)) {
+                $this->{$optionName} = $optionValue;
+            }
+        }
+
+        return $this;
     }
 
     public function analyse(array $stmts)

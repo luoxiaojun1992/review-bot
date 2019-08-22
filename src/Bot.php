@@ -47,8 +47,14 @@ class Bot
     protected function analyse($filePath, $ast)
     {
         foreach ($this->analysers as $analyserClass) {
+            if (is_array($analyserClass)) {
+                list($analyserClass, $analyserOptions) = $analyserClass;
+            } else {
+                $analyserOptions = [];
+            }
+
             /** @var \Lxj\Review\Bot\Analyser\Analyser $analyser */
-            $analyser = (new $analyserClass($filePath, $this->ignored));
+            $analyser = (new $analyserClass($filePath, $this->ignored, $analyserOptions));
             $this->collectErrors($analyser->analyse($ast)->getErrors());
         }
     }

@@ -7,6 +7,8 @@ use PhpParser\Node\Stmt\ClassMethod;
 
 class MethodAnalyser extends Analyser
 {
+    protected $methodLinesLimit = 500;
+
     public function analyse(array $stmts)
     {
         parent::analyse($stmts);
@@ -21,7 +23,7 @@ class MethodAnalyser extends Analyser
     {
         foreach ($stmts as $stmt) {
             if ($stmt instanceof ClassMethod) {
-                if ($stmt->getEndLine() - $stmt->getStartLine() > 500) {
+                if ($stmt->getEndLine() - $stmt->getStartLine() > $this->methodLinesLimit) {
                     $this->addError($stmt->getLine(), Errors::METHOD_TOO_LARGE);
                 }
             }
