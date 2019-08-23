@@ -108,7 +108,7 @@ class GitBot
         if (!is_dir($localProjectDir)) {
             shell_exec('cd ' . $storageDir . ' && git clone ' . $projectUrl . ' ./' . $projectId . ' && cd ' . $projectId . ' && git checkout ' . $sourceBranch);
         } else {
-            shell_exec('cd ' . $localProjectDir . ' && git checkout ' . $sourceBranch . ' && git pull');
+            shell_exec('cd ' . $localProjectDir . ' && git pull && git checkout ' . $sourceBranch . ' && git pull');
         }
     }
 
