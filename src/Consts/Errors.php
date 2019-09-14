@@ -19,6 +19,7 @@ class Errors
     const RET_API_FORMAT_DATA_IN_LOGIC = 13;
     const METHOD_TOO_LARGE = 14;
     const TOO_MANY_ARGUMENTS = 15;
+    const INCONSISTENT_IN_ARRAY_ARG_TYPE = 16;
 
     const MESSAGES = [
         self::ECHO_IN_CONTROLLER => 'Cannot echo in controller.',
@@ -36,6 +37,7 @@ class Errors
         self::RET_API_FORMAT_DATA_IN_LOGIC => 'Cannot return api format data in logic.',
         self::METHOD_TOO_LARGE => 'Method is too large.',
         self::TOO_MANY_ARGUMENTS => 'Too many arguments.',
+        self::INCONSISTENT_IN_ARRAY_ARG_TYPE => 'Inconsistent in array function arguments types.',
     ];
 
     const CHINESE_MESSAGES = [
@@ -54,6 +56,7 @@ class Errors
 //        self::RET_API_FORMAT_DATA_IN_LOGIC => '',
 //        self::METHOD_TOO_LARGE => '',
 //        self::TOO_MANY_ARGUMENTS => '',
+//        self::INCONSISTENT_IN_ARRAY_ARG_TYPE => '',
     ];
 
     public static function message($code)
