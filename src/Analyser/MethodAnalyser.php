@@ -13,7 +13,6 @@ class MethodAnalyser extends Analyser
     {
         parent::analyse($stmts);
 
-        $this->analyseClassTypes($stmts);
         $this->analyseMethodSize($stmts);
 
         return $this;

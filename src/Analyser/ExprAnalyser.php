@@ -13,7 +13,6 @@ class ExprAnalyser extends Analyser
     {
         parent::analyse($stmts);
 
-        $this->analyseClassTypes($stmts);
         $this->analyseInArrayExpr($stmts);
 
         return $this;

@@ -13,7 +13,6 @@ class ParameterAnalyser extends Analyser
     {
         parent::analyse($stmts);
 
-        $this->analyseClassTypes($stmts);
         $this->analyseParameter($stmts);
 
         return $this;
