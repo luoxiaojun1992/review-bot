@@ -8,5 +8,4 @@ return [
     [\Lxj\Review\Bot\Analyser\ParameterAnalyser::class, ['argumentLengthLimit' => 10]],
     \Lxj\Review\Bot\Analyser\ReturnAnalyser::class,
     [\Lxj\Review\Bot\Analyser\MethodAnalyser::class, ['methodLinesLimit' => 500]],
-    Lxj\Review\Bot\Analyser\ExprAnalyser::class,
 ];
