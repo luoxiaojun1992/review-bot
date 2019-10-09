@@ -11,8 +11,6 @@ class ParameterAnalyser extends Analyser
 
     public function analyse(array $stmts)
     {
-        parent::analyse($stmts);
-
         $this->analyseParameter($stmts);
 
         return $this;
@@ -20,29 +18,23 @@ class ParameterAnalyser extends Analyser
 
     protected function analyseParameter(array $stmts)
     {
-        foreach ($stmts as $stmt) {
-            if ($stmt instanceof ClassMethod) {
-                if (count($stmt->params) > $this->argumentLengthLimit) {
-                    $this->addError($stmt->getLine(), Errors::TOO_MANY_ARGUMENTS);
+        $this->scanElements($stmts, function ($element) {
+            if ($element instanceof ClassMethod) {
+                if (count($element->params) > $this->argumentLengthLimit) {
+                    $this->addError($element->getLine(), Errors::TOO_MANY_ARGUMENTS);
                 }
 
-                foreach ($stmt->params as $i => $param) {
+                foreach ($element->params as $i => $param) {
                     if (!is_null($param->default)) {
-                        if (isset($stmt->params[$i + 1])) {
-                            if (is_null($stmt->params[$i + 1]->default)) {
-                                $this->addError($stmt->getLine(), Errors::ME_ARGS_WITH_DEFAULT_VALUE);
+                        if (isset($element->params[$i + 1])) {
+                            if (is_null($element->params[$i + 1]->default)) {
+                                $this->addError($element->getLine(), Errors::ME_ARGS_WITH_DEFAULT_VALUE);
                                 break;
                             }
                         }
                     }
                 }
             }
-
-            if (property_exists($stmt, 'stmts')) {
-                if (is_array($stmt->stmts) && count($stmt->stmts) > 0) {
-                    $this->analyseParameter($stmt->stmts);
-                }
-            }
-        }
+        });
     }
 }

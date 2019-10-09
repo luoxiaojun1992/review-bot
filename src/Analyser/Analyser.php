@@ -13,7 +13,7 @@ use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 
-class Analyser
+abstract class Analyser
 {
     protected $errors = [];
 
@@ -31,6 +31,26 @@ class Analyser
         $this->setOptions($options);
     }
 
+    protected function scanElements($elements, $handler, &$scanned = [])
+    {
+        if (is_array($elements)) {
+            foreach ($elements as $element) {
+                $this->scanElements($element, $handler, $scanned);
+            }
+        } elseif (is_object($elements)) {
+            $elementId = spl_object_id($elements);
+            if (in_array($elementId, $scanned)) {
+                return;
+            }
+            $scanned[] = $elementId;
+
+            call_user_func_array($handler, [$elements]);
+            foreach ($elements as $property) {
+                $this->scanElements($property, $handler, $scanned);
+            }
+        }
+    }
+
     protected function setOptions($options)
     {
         foreach ($options as $optionName => $optionValue) {
@@ -42,30 +62,19 @@ class Analyser
         return $this;
     }
 
-    public function analyse(array $stmts)
-    {
-        return $this;
-    }
+    abstract public function analyse(array $stmts);
 
     protected function analyseClassTypes(array $stmts)
     {
-        foreach ($stmts as $stmt) {
-            if ($this->assertController($stmt)) {
+        $this->scanElements($stmts, function ($element) {
+            if ($this->assertController($element)) {
                 $this->isController = true;
-            }
-            if ($this->assertLogic($stmt)) {
+            } elseif ($this->assertLogic($element)) {
                 $this->isLogic = true;
-            }
-            if ($this->assertCommand($stmt)) {
+            } elseif ($this->assertCommand($element)) {
                 $this->isCommand = true;
             }
-
-            if (property_exists($stmt, 'stmts')) {
-                if (is_array($stmt->stmts) && count($stmt->stmts) > 0) {
-                    $this->analyseClassTypes($stmt->stmts);
-                }
-            }
-        }
+        });
     }
 
     protected function assertController($stmt)

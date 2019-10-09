@@ -8,8 +8,6 @@ class EchoAnalyser extends Analyser
 {
     public function analyse(array $stmts)
     {
-        parent::analyse($stmts);
-
         $this->analyseClassTypes($stmts);
         $this->analyseHasEcho($stmts);
 
@@ -18,21 +16,15 @@ class EchoAnalyser extends Analyser
 
     protected function analyseHasEcho(array $stmts)
     {
-        foreach ($stmts as $stmt) {
-            if ($this->assertEcho($stmt)) {
+        $this->scanElements($stmts, function ($element) {
+            if ($this->assertEcho($element)) {
                 if ($this->isController) {
-                    $this->addError($stmt->getLine(), Errors::ECHO_IN_CONTROLLER);
+                    $this->addError($element->getLine(), Errors::ECHO_IN_CONTROLLER);
                 }
                 if ($this->isLogic) {
-                    $this->addError($stmt->getLine(), Errors::ECHO_IN_LOGIC);
+                    $this->addError($element->getLine(), Errors::ECHO_IN_LOGIC);
                 }
             }
-
-            if (property_exists($stmt, 'stmts')) {
-                if (is_array($stmt->stmts) && count($stmt->stmts) > 0) {
-                    $this->analyseHasEcho($stmt->stmts);
-                }
-            }
-        }
+        });
     }
 }

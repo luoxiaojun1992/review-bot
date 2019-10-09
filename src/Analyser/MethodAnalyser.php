@@ -11,8 +11,6 @@ class MethodAnalyser extends Analyser
 
     public function analyse(array $stmts)
     {
-        parent::analyse($stmts);
-
         $this->analyseMethodSize($stmts);
 
         return $this;
@@ -20,18 +18,12 @@ class MethodAnalyser extends Analyser
 
     protected function analyseMethodSize(array $stmts)
     {
-        foreach ($stmts as $stmt) {
-            if ($stmt instanceof ClassMethod) {
-                if ($stmt->getEndLine() - $stmt->getStartLine() > $this->methodLinesLimit) {
-                    $this->addError($stmt->getLine(), Errors::METHOD_TOO_LARGE);
+        $this->scanElements($stmts, function ($element) {
+            if ($element instanceof ClassMethod) {
+                if ($element->getEndLine() - $element->getStartLine() > $this->methodLinesLimit) {
+                    $this->addError($element->getLine(), Errors::METHOD_TOO_LARGE);
                 }
             }
-
-            if (property_exists($stmt, 'stmts')) {
-                if (is_array($stmt->stmts) && count($stmt->stmts) > 0) {
-                    $this->analyseMethodSize($stmt->stmts);
-                }
-            }
-        }
+        });
     }
 }
