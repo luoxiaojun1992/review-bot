@@ -57,6 +57,9 @@ class GitBot
 
         $pathArr = array_values(array_filter(explode('/', $urlInfo['path'])));
         $mrIdIndex = array_search('merge_requests', $pathArr);
+        if (!is_int($mrIdIndex)) {
+            throw new \Exception('Invalid merge request url.');
+        }
         $projectName = $pathArr[$mrIdIndex - 1];
         $mergeRequestId = $pathArr[$mrIdIndex + 1];
 
@@ -77,7 +80,9 @@ class GitBot
         }
 
         if (count($projects) > 1) {
-            throw new \Exception('Searched multiple projects:' . json_encode(array_column($projects, 'name')));
+            throw new \Exception(
+                'Searched multiple projects:' . json_encode(array_column($projects, 'name'))
+            );
         }
 
         return $projects[0];
