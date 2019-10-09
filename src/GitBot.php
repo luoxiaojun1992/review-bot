@@ -56,8 +56,9 @@ class GitBot
         }
 
         $pathArr = array_values(array_filter(explode('/', $urlInfo['path'])));
-        $projectName = $pathArr[1];
-        $mergeRequestId = $pathArr[3];
+        $mrIdIndex = array_search('merge_requests', $pathArr);
+        $projectName = $pathArr[$mrIdIndex - 1];
+        $mergeRequestId = $pathArr[$mrIdIndex + 1];
 
         return [$projectName, $mergeRequestId];
     }
