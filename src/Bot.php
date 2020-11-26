@@ -19,29 +19,35 @@ class Bot
         $this->parser = $parser ?: (new \PhpParser\ParserFactory())->create(\PhpParser\ParserFactory::PREFER_PHP7);
     }
 
+    public function reviewByCode($filePath, $code)
+    {
+        $ast = $this->parseAst($code);
+        if (is_array($ast) && count($ast) > 0) {
+            $this->analyse($filePath, $ast);
+        }
+    }
+
     public function review($fileOrDir)
     {
         if (is_dir($fileOrDir)) {
             $fd = opendir($fileOrDir);
             while ($subFileOrDir = readdir($fd)) {
                 if (!in_array($subFileOrDir, ['.', '..'])) {
-                    $this->review($fileOrDir . '/' . $subFileOrDir);
+                    $filePath = $fileOrDir . '/' . $subFileOrDir;
+                    $this->reviewByCode($fileOrDir, file_get_contents($filePath));
                 }
             }
             closedir($fd);
         } else {
-            $ast = $this->parseAst($fileOrDir);
-            if (is_array($ast) && count($ast) > 0) {
-                $this->analyse($fileOrDir, $ast);
-            }
+            $this->reviewByCode($fileOrDir, file_get_contents($fileOrDir));
         }
 
         return $this;
     }
 
-    protected function parseAst($filePath)
+    protected function parseAst($code)
     {
-        return $this->parser->parse(file_get_contents($filePath));
+        return $this->parser->parse($code);
     }
 
     protected function analyse($filePath, $ast)
